@@ -17,7 +17,6 @@ class marker:
         self.diameter = diameter
         self.updated = True
         self.canvas.create_oval(posX, posY, posX + diameter, posY + diameter, fill=color, width=2)
-        # self.canvas.bind('<Motion>', lambda event: self.handle(event)) не работает :((
         self.tip = None
         self.tips = []
         self.window = window
@@ -29,7 +28,7 @@ class marker:
     def textSlicer(self):
         output = []
         buff = self.textDesc
-        self.canvas.update()
+        #self.canvas.update() #ошибка рекурсии!
         lb = Label(self.window, font=self.descpiptionFont, text=buff)
         if not lb.winfo_reqwidth() >= self.canvas.winfo_width() - self.posX:
             output.append(buff)
@@ -77,34 +76,11 @@ class marker:
         print("X:", self.posX, " Y:", self.posY, " Text:", self.textDesc, sep="")
 
     def handle(self, event):
-        if self.posX <= event.x <= self.diameter + self.posX and self.posY <= event.y <= self.diameter + self.posY:
+        if self.posX <= event.x <= (self.diameter + self.posX) and self.posY <= event.y <= (self.diameter + self.posY):
             self.drawTip()
         else:
             self.drawTip(False)
 
     def handleClick(self,event):
-        if self.posX <= event.x <= self.diameter + self.posX and self.posY <= event.y <= self.diameter + self.posY:
+        if self.posX <= event.x <= (self.diameter + self.posX) and self.posY <= event.y <= (self.diameter + self.posY): #скобочки решают все проблемы :)
             self.callback()
-
-
-
-# window = Tk()
-# window.title("Белгород сити")
-# window.geometry("1000x500")
-# figures = Canvas(window)
-# bebs = []
-# bebs.append(marker(300, 400,
-#                    "just sus — Сегодня, в 10:29  ВАДИИМ  ngrok становится вечным когда регистрируешься  тут больше нет временiи",
-#                    "yellow", 20, figures))
-# bebs.append(marker(200, 200, "Дом творчества", "lime", 50, figures))
-# bebs.append(marker(100, 200, "Сбебранк", "green", 40, figures))
-# figures.pack(fill=BOTH, expand=1)
-
-
-# def eventHandler(event):
-#     for bob in bebs:
-#         bob.handle(event=event)
-
-
-# figures.bind('<Motion>', eventHandler)
-# window.mainloop()
